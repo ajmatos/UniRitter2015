@@ -37,11 +37,11 @@ namespace UniRitter.UniRitter2015.Controllers
         }
 
         // POST: api/Person
-        public IHttpActionResult Post([FromBody]PersonModel person)
+        public IHttpActionResult Post([FromBody]PersonModel model)
         {
             if (ModelState.IsValid)
             {
-                var data = _repo.Add(person);
+                var data = _repo.Add(model);
                 return Json(data);
             }
             else
@@ -51,10 +51,10 @@ namespace UniRitter.UniRitter2015.Controllers
         }
 
         // PUT: api/Person/5
-        public IHttpActionResult Put(Guid id, [FromBody]PersonModel person)
+        public IHttpActionResult Put(Guid id, [FromBody]PersonModel model)
         {
-            var data = _repo.Update(id, person);
-            return Json(person);
+            var data = _repo.Update(id, model);
+            return Json(model);
         }
 
         // DELETE: api/Person/5

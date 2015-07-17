@@ -7,16 +7,16 @@ using UniRitter.UniRitter2015.Models;
 
 namespace UniRitter.UniRitter2015.Services.Implementation
 {
-    public class MongoPersonRepository : IRepository<PersonModel>
+    public class MongoPersonRepositoryOLD : IRepository<PersonModel>
     {
         private IMongoDatabase database;
         private IMongoCollection<PersonModel> collection;
 
-        public MongoPersonRepository()
+        public void MongoPersonRepository()
         {
-            var client = new MongoClient("mongodb://localhost");
-            database = client.GetDatabase("uniritter");
-            collection = database.GetCollection<PersonModel>("people");
+            //var client = new MongoClient("mongodb://localhost");
+            //database = client.GetDatabase("uniritter");
+            //collection = database.GetCollection<PersonModel>("people");
         }
 
         public PersonModel Add(PersonModel model)
