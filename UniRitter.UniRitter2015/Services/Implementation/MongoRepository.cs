@@ -1,25 +1,34 @@
-﻿using MongoDB.Driver;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+using MongoDB.Driver;
 using UniRitter.UniRitter2015.Models;
 
 namespace UniRitter.UniRitter2015.Services.Implementation
 {
-    public class MongoPersonRepository : IRepository<PersonModel>
+    public class MongoRepository<TModel> : IRepository<TModel> where TModel: class, IModel
     {
-        private IMongoDatabase database;
-        private IMongoCollection<PersonModel> collection;
+        private readonly IMongoCollection<TModel> collection;
+        private readonly IMongoDatabase database;
 
-        public MongoPersonRepository()
+        public MongoRepository()
+        {
+                var typeName = typeof(TModel).Name;
+
+        }
+
+        public MongoRepository(string collectionName)
+        {
+           SetupCollection(collectionName);
+        }
+
+        public void SetupCollection(string collectionName)
         {
             var client = new MongoClient("mongodb://localhost");
             database = client.GetDatabase("uniritter");
-            collection = database.GetCollection<PersonModel>("people");
+            collection = database.GetCollection<TModel>(collectionName);
         }
 
-        public PersonModel Add(PersonModel model)
+        public virtual TModel Add(TModel model)
         {
             if (!model.id.HasValue)
             {
@@ -29,146 +38,41 @@ namespace UniRitter.UniRitter2015.Services.Implementation
             return model;
         }
 
-        public bool Delete(Guid id)
+        public virtual bool Delete(Guid modelId)
         {
             var result = collection.DeleteOneAsync(
-                p => p.id == id).Result;
+                p => p.id == modelId).Result;
 
             return result.DeletedCount > 0;
         }
 
-        public PersonModel Update(Guid id, PersonModel model)
+        public virtual TModel Update(Guid id, TModel model)
         {
             collection.ReplaceOneAsync(p => p.id == id, model).Wait();
+
             return model;
         }
 
-        public IEnumerable<PersonModel> GetAll()
+        public virtual IEnumerable<TModel> GetAll()
         {
-            var data = collection.Find(p => true).ToListAsync<PersonModel>();
+            var data = collection.Find(
+                p => true).ToListAsync();
             return data.Result;
         }
 
-        public PersonModel GetById(Guid id)
+        public virtual TModel GetById(Guid id)
         {
-            var data = collection.Find(p => p.id == id).FirstOrDefaultAsync();
+            var data = collection.Find(
+                p => p.id == id).FirstOrDefaultAsync();
             return data.Result;
         }
 
-        public void Upsert(IEnumerable<PersonModel> peopleList)
+        public virtual void Upsert(IEnumerable<TModel> itemList)
         {
             var options = new UpdateOptions { IsUpsert = true };
-            foreach (var person in peopleList)
+            foreach (var item in itemList)
             {
-                collection.ReplaceOneAsync(model => model.id == person.id, person, options);
-            }
-        }
-    }
-
-    public class MongoPostRepository : IRepository<PostModel>
-    {
-        private IMongoDatabase database;
-        private IMongoCollection<PostModel> collection;
-
-        public MongoPostRepository()
-        {
-            var client = new MongoClient("mongodb://localhost");
-            database = client.GetDatabase("uniritter");
-            collection = database.GetCollection<PostModel>("post");
-        }
-
-        public PostModel Add(PostModel model)
-        {
-            model.id = Guid.NewGuid();
-            collection.InsertOneAsync(model).Wait();
-            return model;
-        }
-
-        public bool Delete(Guid id)
-        {
-            var result = collection.DeleteOneAsync(
-                p => p.id == id).Result;
-
-            return result.DeletedCount > 0;
-        }
-
-        public PostModel Update(Guid id, PostModel model)
-        {
-            collection.ReplaceOneAsync(p => p.id == id, model).Wait();
-            return model;
-        }
-
-        public IEnumerable<PostModel> GetAll()
-        {
-            var data = collection.Find(p => true).ToListAsync<PostModel>();
-            return data.Result;
-        }
-
-        public PostModel GetById(Guid id)
-        {
-            var data = collection.Find(p => p.id == id).FirstOrDefaultAsync();
-            return data.Result;
-        }
-
-        public void Upsert(IEnumerable<PostModel> list)
-        {
-            var options = new UpdateOptions { IsUpsert = true };
-            foreach (var post in list)
-            {
-                collection.ReplaceOneAsync(model => model.id == post.id, post, options);
-            }
-        }
-    }
-
-    public class MongoCommentRepository : IRepository<CommentModel>
-    {
-        private IMongoDatabase database;
-        private IMongoCollection<CommentModel> collection;
-
-        public MongoCommentRepository()
-        {
-            var client = new MongoClient("mongodb://localhost");
-            database = client.GetDatabase("uniritter");
-            collection = database.GetCollection<CommentModel>("comment");
-        }
-
-        public CommentModel Add(CommentModel model)
-        {
-            model.id = Guid.NewGuid();
-            collection.InsertOneAsync(model).Wait();
-            return model;
-        }
-
-        public bool Delete(Guid id)
-        {
-            var result = collection.DeleteOneAsync(p => p.id == id).Result;
-            return result.DeletedCount > 0;
-        }
-
-        public CommentModel Update(Guid id, CommentModel model)
-        {
-            collection.ReplaceOneAsync(p => p.id == id, model).Wait();
-            return model;
-        }
-
-        public IEnumerable<CommentModel> GetAll()
-        {
-            var data = collection.Find(p => true).ToListAsync<CommentModel>();
-            return data.Result;
-        }
-
-        public CommentModel GetById(Guid id)
-        {
-            var data = collection.Find(p => p.id == id).FirstOrDefaultAsync();
-            return data.Result;
-        }
-
-        public void Upsert(IEnumerable<CommentModel> list)
-        {
-            var options = new UpdateOptions { IsUpsert = true };
-            foreach (var comment in list)
-            {
-                collection.ReplaceOneAsync(model => model.id == comment.id, comment, options);
+                collection.ReplaceOneAsync(model => model.id == item.id, item, options);
             }
         }
     }
