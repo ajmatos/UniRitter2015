@@ -21,7 +21,10 @@ namespace UniRitter.UniRitter2015.Services.Implementation
 
         public PersonModel Add(PersonModel model)
         {
-            model.id = Guid.NewGuid();
+            if (!model.id.HasValue)
+            {
+                model.id = Guid.NewGuid();
+            }
             collection.InsertOneAsync(model).Wait();
             return model;
         }
@@ -50,6 +53,15 @@ namespace UniRitter.UniRitter2015.Services.Implementation
         {
             var data = collection.Find(p => p.id == id).FirstOrDefaultAsync();
             return data.Result;
+        }
+
+        public void Upsert(IEnumerable<PersonModel> peopleList)
+        {
+            var options = new UpdateOptions { IsUpsert = true };
+            foreach (var person in peopleList)
+            {
+                collection.ReplaceOneAsync(model => model.id == person.id, person, options);
+            }
         }
     }
 
@@ -97,6 +109,15 @@ namespace UniRitter.UniRitter2015.Services.Implementation
             var data = collection.Find(p => p.id == id).FirstOrDefaultAsync();
             return data.Result;
         }
+
+        public void Upsert(IEnumerable<PostModel> list)
+        {
+            var options = new UpdateOptions { IsUpsert = true };
+            foreach (var post in list)
+            {
+                collection.ReplaceOneAsync(model => model.id == post.id, post, options);
+            }
+        }
     }
 
     public class MongoCommentRepository : IRepository<CommentModel>
@@ -140,6 +161,15 @@ namespace UniRitter.UniRitter2015.Services.Implementation
         {
             var data = collection.Find(p => p.id == id).FirstOrDefaultAsync();
             return data.Result;
+        }
+
+        public void Upsert(IEnumerable<CommentModel> list)
+        {
+            var options = new UpdateOptions { IsUpsert = true };
+            foreach (var comment in list)
+            {
+                collection.ReplaceOneAsync(model => model.id == comment.id, comment, options);
+            }
         }
     }
 }
