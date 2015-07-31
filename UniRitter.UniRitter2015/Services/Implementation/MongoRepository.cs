@@ -7,8 +7,8 @@ namespace UniRitter.UniRitter2015.Services.Implementation
 {
     public class MongoRepository<TModel> : IRepository<TModel> where TModel: class, IModel
     {
-        private readonly IMongoCollection<TModel> collection;
-        private readonly IMongoDatabase database;
+        private IMongoCollection<TModel> collection;
+        private IMongoDatabase database;
 
         public MongoRepository()
         {
@@ -18,7 +18,7 @@ namespace UniRitter.UniRitter2015.Services.Implementation
 
         public MongoRepository(string collectionName)
         {
-           SetupCollection(collectionName);
+            SetupCollection(collectionName);
         }
 
         public void SetupCollection(string collectionName)

@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web.Http;
 using UniRitter.UniRitter2015.Models;
+using UniRitter.UniRitter2015.Services;
 
 namespace UniRitter.UniRitter2015.Controllers
 {
@@ -13,7 +14,7 @@ namespace UniRitter.UniRitter2015.Controllers
     {
         private readonly IRepository<TModel> _repo;
 
-        public PeopleController(IRepository<PersonModel> repo)
+        public BaseController(IRepository<TModel> repo)
         {
             _repo = repo;
         }
