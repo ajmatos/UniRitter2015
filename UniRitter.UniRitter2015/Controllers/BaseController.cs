@@ -25,13 +25,13 @@ namespace UniRitter.UniRitter2015.Controllers
         }
 
         // GET: api/Person
-        public async Task<IHttpActionResult> Get()
+        public virtual async Task<IHttpActionResult> Get()
         {
             return Json(await _repo.GetAll());
         }
 
         // GET: api/Person/5
-        public async Task<IHttpActionResult> Get(Guid id)
+        public virtual async Task<IHttpActionResult> Get(Guid id)
         {
             var data = await _repo.GetById(id);
             if (data != null)
@@ -42,7 +42,7 @@ namespace UniRitter.UniRitter2015.Controllers
         }
 
         // POST: api/Person
-        public async Task<IHttpActionResult> Post([FromBody] TModel model)
+        public virtual async Task<IHttpActionResult> Post([FromBody] TModel model)
         {
             if (ModelState.IsValid)
             {
@@ -53,14 +53,14 @@ namespace UniRitter.UniRitter2015.Controllers
         }
 
         // PUT: api/Person/5
-        public async Task<IHttpActionResult> Put(Guid id, [FromBody] TModel model)
+        public virtual async Task<IHttpActionResult> Put(Guid id, [FromBody] TModel model)
         {
             var data = await _repo.Update(id, model);
             return Json(model);
         }
 
         // DELETE: api/Person/5
-        public async Task<IHttpActionResult> Delete(Guid id)
+        public virtual async Task<IHttpActionResult> Delete(Guid id)
         {
             await _repo.Delete(id);
             return StatusCode(HttpStatusCode.NoContent);
