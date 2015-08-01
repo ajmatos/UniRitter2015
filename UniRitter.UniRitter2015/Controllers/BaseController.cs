@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web.Http;
@@ -12,11 +13,57 @@ namespace UniRitter.UniRitter2015.Controllers
     abstract public class BaseController<TModel> : ApiController
         where TModel: class, IModel
     {
-        private readonly IRepository<TModel> _repo;
+        private IRepository<TModel> _repo;
 
         public BaseController(IRepository<TModel> repo)
         {
             _repo = repo;
         }
-   }
+
+        public BaseController()
+        {
+        }
+
+        // GET: api/Person
+        public async Task<IHttpActionResult> Get()
+        {
+            return Json(await _repo.GetAll());
+        }
+
+        // GET: api/Person/5
+        public async Task<IHttpActionResult> Get(Guid id)
+        {
+            var data = await _repo.GetById(id);
+            if (data != null)
+            {
+                return Json(data);
+            }
+            return NotFound();
+        }
+
+        // POST: api/Person
+        public async Task<IHttpActionResult> Post([FromBody] TModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var data = await _repo.Add(model);
+                return Json(data);
+            }
+            return BadRequest(ModelState);
+        }
+
+        // PUT: api/Person/5
+        public async Task<IHttpActionResult> Put(Guid id, [FromBody] TModel model)
+        {
+            var data = await _repo.Update(id, model);
+            return Json(model);
+        }
+
+        // DELETE: api/Person/5
+        public async Task<IHttpActionResult> Delete(Guid id)
+        {
+            await _repo.Delete(id);
+            return StatusCode(HttpStatusCode.NoContent);
+        }
+    }
 }
