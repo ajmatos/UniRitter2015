@@ -48,6 +48,6 @@ Background:
 	Then I receive an error (code 400) return message
 	And I receive a message that conforms <messageRegex>
 	Examples:
-	| case              | data																						| messageRegex	|
-	| missing firstName	| {"LastName":"de Tal","FirstName":"fulano","email":"fulano@email.com","Url":"http://fulano.com.br"}				| .*firstName.*	|
-	| invalid email		| {"LastName":"de Tal", "Email":"fulano","Url":"http://fulano.com.br"} | .*email.*		|
+	| case              | data																				| messageRegex	|
+	| missing firstName	| {"LastName":"de Tal", "email":"fulano@email.com","Url":"http://fulano.com.br"}	| .*firstName.*	|
+	| invalid email		| {"LastName":"de Tal", "Email":"fulano","Url":"http://fulano.com.br"}				| .*email.*		|
