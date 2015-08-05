@@ -7,7 +7,6 @@ using UniRitter.UniRitter2015.Services;
 
 namespace UniRitter.UniRitter2015.Controllers
 {
-
     public class CommentsController : BaseController<PostModel>
     {
         private readonly IRepository<CommentModel> _repo;

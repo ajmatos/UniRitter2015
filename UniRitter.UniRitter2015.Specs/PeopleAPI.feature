@@ -5,6 +5,7 @@
 
 Background: 
 	Given an API populated with the following people
+{
 	| id									| firstName | lastName	| email				| url					|
 	| 8d0d477f-1378-4fc1-bb47-29eb3ea959e1	| John		| Doe		| john@email.com	| http://john.doe.com	|
 	| 58b024e9-57dc-49e4-8fc9-2d4d82bf1670	| Jane		| Doe		| jane@email.com	| http://jane.doe.com	|
@@ -48,5 +49,5 @@ Background:
 	And I receive a message that conforms <messageRegex>
 	Examples:
 	| case              | data																						| messageRegex	|
-	| missing firstName	| {"LastName":"de Tal","Email":"fulano@email.com","Url":"http://fulano.com.br"}				| .*firstName.*	|
-	| invalid email		| {"LastName":"de Tal","FirstName":"fulano", "Email":"fulano","Url":"http://fulano.com.br"} | .*email.*		|
+	| missing firstName	| {"LastName":"de Tal","FirstName":"fulano","email":"fulano@email.com","Url":"http://fulano.com.br"}				| .*firstName.*	|
+	| invalid email		| {"LastName":"de Tal", "Email":"fulano","Url":"http://fulano.com.br"} | .*email.*		|
