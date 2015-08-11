@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
-using System.Text;
 using System.Threading.Tasks;
 using System.Web.Http;
 using UniRitter.UniRitter2015.Models;
@@ -13,36 +10,35 @@ namespace UniRitter.UniRitter2015.Controllers
     abstract public class BaseController<TModel> : ApiController
         where TModel: class, IModel
     {
-        private IRepository<TModel> _repo;
+        public IRepository<TModel> _repo;
 
         public BaseController(IRepository<TModel> repo)
         {
             _repo = repo;
         }
 
-        public BaseController()
-        {
-        }
+        public BaseController() { }
 
-        // GET: api/Person
+        // GET: api/Model
         public virtual async Task<IHttpActionResult> Get()
         {
             return Json(await _repo.GetAll());
         }
 
-        // GET: api/Person/5
+        // GET: api/Model/5
         public virtual async Task<IHttpActionResult> Get(Guid id)
         {
             var data = await _repo.GetById(id);
             if (data != null)
             {
                 return Json(data);
+            } else {
+                return NotFound();
             }
-            return NotFound();
         }
 
-        // POST: api/Person
-        public virtual async Task<IHttpActionResult> Post([FromBody] TModel model)
+        // POST: api/Model
+        public virtual async Task<IHttpActionResult> Post([FromBody]TModel model)
         {
             if (ModelState.IsValid)
             {
@@ -52,14 +48,14 @@ namespace UniRitter.UniRitter2015.Controllers
             return BadRequest(ModelState);
         }
 
-        // PUT: api/Person/5
-        public virtual async Task<IHttpActionResult> Put(Guid id, [FromBody] TModel model)
+        // PUT: api/Model/5
+        public virtual async Task<IHttpActionResult> Put(Guid id, [FromBody]TModel model)
         {
             var data = await _repo.Update(id, model);
-            return Json(model);
+            return Json(data);
         }
 
-        // DELETE: api/Person/5
+        // DELETE: api/Model/5
         public virtual async Task<IHttpActionResult> Delete(Guid id)
         {
             await _repo.Delete(id);
