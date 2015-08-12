@@ -27,15 +27,15 @@ namespace UniRitter.UniRitter2015.Specs
         public PeopleAPISteps()
         {
             client = new HttpClient();
-            client.BaseAddress = new Uri("http://localhost:49556/");
+            client.BaseAddress = new Uri("http://localhost:9000/");
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
         }
 
-        [When(@"I post it to the /people API endpoint")]
+        [When(@"I post it to the /People API endpoint")]
         public void WhenIPostItToThePeopleAPIEndpoint()
         {
-            response = client.PostAsJsonAsync("people", personData).Result;
+            response = client.PostAsJsonAsync("People", personData).Result;
         }
 
         private void CheckCode(int code)
@@ -122,7 +122,7 @@ namespace UniRitter.UniRitter2015.Specs
         public void ThenICanFetchItFromTheAPI()
         {
             var id = result.id.Value;
-            var newEntry = client.GetAsync("people/" + id).Result;
+            var newEntry = client.GetAsync("People/" + id).Result;
             Assert.That(newEntry, Is.Not.Null);
         }
 
@@ -138,23 +138,25 @@ namespace UniRitter.UniRitter2015.Specs
             // step purposefully left blank
         }
 
-        [Given(@"an API populated with the following people")]
+        [Given(@"an API populated with the following People")]
         public void GivenAnAPIPopulatedWithTheFollowingPeople(Table table)
         {
             backgroundData = table.CreateSet<Person>();
-            //var mongoRepo = new MongoRepository<PersonModel>(new ApiConfig());
-            //mongoRepo.Upsert(table.CreateSet<PersonModel>());
+            var mongoRepo = new MongoRepository<PersonModel>(new ApiConfig());
+            mongoRepo.Upsert(table.CreateSet<PersonModel>());
+            /*
             var repo = new InMemoryRepository<PersonModel>();
             foreach (var entry in table.CreateSet<PersonModel>()) {
                 repo.Add(entry);
             }
+            */
         }
 
         [When(@"I post the following data to the /people API endpoint: (.+)")]
         public void WhenIPostTheFollowingDataToThePeopleAPIEndpoint(string jsonData)
         {
             personData = JsonConvert.DeserializeObject<Person>(jsonData);
-            response = client.PostAsJsonAsync("people", personData).Result;
+            response = client.PostAsJsonAsync("People", personData).Result;
         }
 
         [Then(@"I receive a message that conforms (.+)")]

@@ -78,23 +78,23 @@ namespace UniRitter.UniRitter2015.Specs
             table1.AddRow(new string[] {
                         "8d0d477f-1378-4fc1-bb47-29eb3ea959e1",
                         "John",
-                        "Doe",
+                        "Doe2",
                         "john@email.com",
                         "http://john.doe.com"});
             table1.AddRow(new string[] {
                         "58b024e9-57dc-49e4-8fc9-2d4d82bf1670",
                         "Jane",
-                        "Doe",
+                        "Doe2",
                         "jane@email.com",
                         "http://jane.doe.com"});
             table1.AddRow(new string[] {
                         "1a5fd0be-d654-40ff-8190-ca59e3b52e76",
                         "Jack",
-                        "Doe",
+                        "Doe1",
                         "jack@email.com",
                         "http://jack.doe.com"});
 #line 7
- testRunner.Given("an API populated with the following people", ((string)(null)), table1, "Given ");
+ testRunner.Given("an API populated with the following People", ((string)(null)), table1, "Given ");
 #line hidden
         }
         
@@ -112,7 +112,7 @@ this.FeatureBackground();
 #line 16
  testRunner.Given("the populated API", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line 17
- testRunner.When("I GET from the /people API endpoint", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+ testRunner.When("I GET from the /People API endpoint", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line 18
  testRunner.Then("I get a list containing the populated resources", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
@@ -141,7 +141,7 @@ this.FeatureBackground();
 #line 22
  testRunner.Given("the populated API", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line 23
- testRunner.When(string.Format("I GET from the /people/{0} API endpoint", id), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+ testRunner.When(string.Format("I GET from the /People/{0} API endpoint", id), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line 24
  testRunner.Then("I receive a success (code 200) return message", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line 25
@@ -175,7 +175,7 @@ this.FeatureBackground();
 #line 34
  testRunner.Given("a person resource as described below:", ((string)(null)), table2, "Given ");
 #line 37
- testRunner.When("I post it to the /people API endpoint", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+ testRunner.When("I post it to the /People API endpoint", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line 38
  testRunner.Then("I receive a success (code 200) return message", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line 39
@@ -210,7 +210,7 @@ this.FeatureBackground();
 #line 45
  testRunner.Given(string.Format("a {0} resource", @case), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line 46
- testRunner.When(string.Format("I post the following data to the /people API endpoint: {0}", data), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+ testRunner.When(string.Format("I post the following data to the /People API endpoint: {0}", data), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line 47
  testRunner.Then("I receive an error (code 400) return message", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line 48
