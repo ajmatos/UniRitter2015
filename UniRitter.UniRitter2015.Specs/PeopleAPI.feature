@@ -10,7 +10,6 @@ Background:
 	| 58b024e9-57dc-49e4-8fc9-2d4d82bf1670	| Jane		| Doe2		| jane@email.com	| http://jane.doe.com	|
 	| 1a5fd0be-d654-40ff-8190-ca59e3b52e76	| Jack		| Doe1		| jack@email.com	| http://jack.doe.com	|
 
-
 	@integrated
 	Scenario: Get all people entries
 	Given the populated API
@@ -38,7 +37,7 @@ Background:
 	Then I receive a success (code 200) return message
 	And I receive the posted resource
 	And the posted resource now has an ID
-	And I can fetch it from the API
+	And I can fetch /Person from the API
 
 	@integrated
 	Scenario Outline: Invalid person data on insertion

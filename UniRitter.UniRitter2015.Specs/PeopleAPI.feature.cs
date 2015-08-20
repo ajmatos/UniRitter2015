@@ -105,15 +105,15 @@ namespace UniRitter.UniRitter2015.Specs
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Get all people entries", new string[] {
                         "integrated"});
-#line 15
+#line 14
  this.ScenarioSetup(scenarioInfo);
 #line 6
 this.FeatureBackground();
-#line 16
+#line 15
  testRunner.Given("the populated API", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
-#line 17
+#line 16
  testRunner.When("I GET from the /People API endpoint", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
-#line 18
+#line 17
  testRunner.Then("I get a list containing the populated resources", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
@@ -134,17 +134,17 @@ this.FeatureBackground();
                 @__tags = System.Linq.Enumerable.ToArray(System.Linq.Enumerable.Concat(@__tags, exampleTags));
             }
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Get a specific person entry", @__tags);
-#line 21
+#line 20
  this.ScenarioSetup(scenarioInfo);
 #line 6
 this.FeatureBackground();
-#line 22
+#line 21
  testRunner.Given("the populated API", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
-#line 23
+#line 22
  testRunner.When(string.Format("I GET from the /People/{0} API endpoint", id), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
-#line 24
+#line 23
  testRunner.Then("I receive a success (code 200) return message", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
-#line 25
+#line 24
  testRunner.And("the data matches that id", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
             this.ScenarioCleanup();
@@ -157,7 +157,7 @@ this.FeatureBackground();
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Add a person", new string[] {
                         "integrated"});
-#line 33
+#line 32
  this.ScenarioSetup(scenarioInfo);
 #line 6
 this.FeatureBackground();
@@ -172,18 +172,18 @@ this.FeatureBackground();
                         "Doe",
                         "josh@email.com",
                         "http://josh.doe.com"});
-#line 34
+#line 33
  testRunner.Given("a person resource as described below:", ((string)(null)), table2, "Given ");
-#line 37
+#line 36
  testRunner.When("I post it to the /People API endpoint", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
-#line 38
+#line 37
  testRunner.Then("I receive a success (code 200) return message", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
-#line 39
+#line 38
  testRunner.And("I receive the posted resource", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line 40
+#line 39
  testRunner.And("the posted resource now has an ID", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line 41
- testRunner.And("I can fetch it from the API", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line 40
+ testRunner.And("I can fetch /Person from the API", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
             this.ScenarioCleanup();
         }
@@ -203,17 +203,17 @@ this.FeatureBackground();
                 @__tags = System.Linq.Enumerable.ToArray(System.Linq.Enumerable.Concat(@__tags, exampleTags));
             }
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Invalid person data on insertion", @__tags);
-#line 44
+#line 43
  this.ScenarioSetup(scenarioInfo);
 #line 6
 this.FeatureBackground();
-#line 45
+#line 44
  testRunner.Given(string.Format("a {0} resource", @case), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
-#line 46
+#line 45
  testRunner.When(string.Format("I post the following data to the /People API endpoint: {0}", data), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
-#line 47
+#line 46
  testRunner.Then("I receive an error (code 400) return message", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
-#line 48
+#line 47
  testRunner.And(string.Format("I receive a message that conforms {0}", messageRegex), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
             this.ScenarioCleanup();
