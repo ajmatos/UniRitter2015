@@ -32,12 +32,9 @@ namespace UniRitter.UniRitter2015.Specs
             postClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
         }
 
-        [Given(@"an API populated with the following Posts")]
-        public void GivenAnAPIPopulatedWithTheFollowingPosts(Table table)
+        [Given(@"an API populated with the following Post")]
+        public void GivenAnAPIPopulatedWithTheFollowingPost(Table table)
         {
-            /*
-            response = client.PostAsJsonAsync("Post", postData).Result;
-            */
              /*
             var mongoRepo = new MongoRepository<PostModel>(new ApiConfig());
             mongoRepo.Upsert(table.CreateSet<PostModel>());
@@ -47,56 +44,36 @@ namespace UniRitter.UniRitter2015.Specs
             foreach (var entry in table.CreateSet<PostModel>()) { repo.Add(entry); }
         }
 
-        [Then(@"the posted resource now has an Post ID")]
-        public void ThenThePostedResourceNowHasAnPostID()
-        {
-            Assert.That(postResult.id, Is.Not.Null);
-        }
-
-        [Given(@"a Post resource as described below:")]
-        public void GivenAPostResourceAsDescribedBelow(Table table)
-        {
-            postData = new Post();
-            table.FillInstance(postData);
-        }
 
 
-        [Given(@"the populated Posts API")]
-        public void GivenThePopulatedPostsAPI()
+        //Scenario: Get all entries Post
+        [Given(@"the populated API Post")]
+        public void GivenThePopulatedAPIPost()
         {
             // This step has been left blank -- data seeding occurs in the backgorund step
         }
 
-
-        [When(@"I GET from the /(.+) API Post endpoint")]
-        public void WhenIGETFromTheAPIPostEndpoint(string path)
+        [When(@"I get from the /(.+) API endpoint Post")]
+        public void WhenIGetFromTheAPIEndpointPost(string path)
         {
             this.postPath = path;
             postResponse = postClient.GetAsync(path).Result;
         }
 
-        [When(@"I post it to the /Posts API endpoint")]
-        public void WhenIPostItToThePostsAPIEndpoint()
-        {
-            postResponse = postClient.PostAsJsonAsync("Posts", postData).Result;
-        }
-
-        [When(@"I post the following data to the /Posts API endpoint: (.+)")]
-        public void WhenIPostTheFollowingDataToThePostsAPIEndpoint(string jsonData)
-        {
-            postData = JsonConvert.DeserializeObject<Post>(jsonData);
-            postResponse = postClient.PostAsJsonAsync("Posts", postData).Result;
-        }
-
-        [Then(@"I get a list containing the populated Posts resources")]
-        public void ThenIGetAListContainingThePopulatedPostsResources()
+        [Then(@"I get a list containing the populated resources Post")]
+        public void ThenIGetAListContainingThePopulatedResourcesPost()
         {
             var resourceList = postResponse.Content.ReadAsAsync<IEnumerable<Post>>().Result;
             Assert.That(postBackgroundData, Is.SubsetOf(resourceList));
         }
 
-        [Then(@"the data Post matches that id")]
-        public void ThenTheDataPostMatchesThatId()
+
+
+        //Scenario Outline: Get a specific entry
+        //Given the populated API Post
+        //When I get from the /Posts/<id> API endpoint Post
+        [Then(@"the data matches that id Post")]
+        public void ThenTheDataMatchesThatIdPost()
         {
             var id = new Guid(postPath.Substring(postPath.LastIndexOf('/') + 1));
             postResult = postResponse.Content.ReadAsAsync<Post>().Result;
@@ -104,19 +81,20 @@ namespace UniRitter.UniRitter2015.Specs
             Assert.That(postResult, Is.EqualTo(expected));
         }
 
-        [Then(@"I can fetch /(.+) from the APIPost")]
-        public void ThenICanFetchItFromTheAPIPost(string path)
+
+
+        //Scenario: Add a Post
+        [Given(@"a resource as described below Post:")]
+        public void GivenAResourceAsDescribedBelowPost(Table table)
         {
-            var id = postResult.id.Value;
-            var newEntry = postClient.GetAsync(path + "/" + id).Result;
-            Assert.That(newEntry, Is.Not.Null);
+            postData = new Post();
+            table.FillInstance(postData);
         }
 
-        [Then(@"I receive the Post resource")]
-        public void ThenIReceiveThePostedResource()
+        [When(@"I post it to the /Posts API endpoint")]
+        public void WhenIPostItToThePostsAPIEndpoint()
         {
-            postResult = postResponse.Content.ReadAsAsync<Post>().Result;
-            Assert.That(postResult.body, Is.EqualTo(postData.body));
+            postResponse = postClient.PostAsJsonAsync("Posts", postData).Result;
         }
 
         [Then(@"I receive a success \(code (.*)\) return Post message")]
@@ -127,9 +105,62 @@ namespace UniRitter.UniRitter2015.Specs
                 var msg = String.Format("API error: {0}", postResponse.Content.ReadAsStringAsync().Result);
                 Assert.Fail(msg);
             }
-
             CheckCode(code);
         }
+
+        [Then(@"I receive the Post resource")]
+        public void ThenIReceiveThePostedResource()
+        {
+            postResult = postResponse.Content.ReadAsAsync<Post>().Result;
+            Assert.That(postResult.body, Is.EqualTo(postData.body));
+        }
+
+        [Then(@"the posted resource now has an Post ID")]
+        public void ThenThePostedResourceNowHasAnPostID()
+        {
+            Assert.That(postResult.id, Is.Not.Null);
+        }
+
+        [Then(@"I can fetch /(.+) from the APIPost")]
+        public void ThenICanFetchItFromTheAPIPost(string path)
+        {
+            var id = postResult.id.Value;
+            var newEntry = postClient.GetAsync(path + "/" + id).Result;
+            Assert.That(newEntry, Is.Not.Null);
+        }
+
+
+
+
+        //Scenario Outline: Invalid post data on insertion
+        [Given(@"(.+) resource Post")]
+        public void GivenAnInvalidResourcePost(string resourceCase)
+        {
+            // step purposefully left blank
+        }
+
+        [When(@"I post the following data to the /Posts API endpoint: (.+)")]
+        public void WhenIPostTheFollowingDataToThePostsAPIEndpoint(string jsonData)
+        {
+            postData = JsonConvert.DeserializeObject<Post>(jsonData);
+            postResponse = postClient.PostAsJsonAsync("Posts", postData).Result;
+        }
+
+        [Then(@"I receive an error \(code (.*)\) return message Post")]
+        public void ThenIReceiveAnErrorCodeReturnMessagePost(int code)
+        {
+            CheckCode(code);
+        }
+
+        [Then(@"I receive a Post message that conforms (.+)")]
+        public void ThenIReceiveAPostMessageThatConforms(string pattern)
+        {
+            var msg = postResponse.Content.ReadAsStringAsync().Result;
+            StringAssert.IsMatch(pattern, msg);
+        }
+
+
+
 
         private void CheckCode(int code)
         {
