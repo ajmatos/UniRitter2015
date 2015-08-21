@@ -196,8 +196,11 @@ this.FeatureBackground();
         [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("Invalid post data on insertion")]
         [NUnit.Framework.CategoryAttribute("integrated")]
-        [NUnit.Framework.TestCaseAttribute("missing body", "{}", ".*body.*", null)]
-        [NUnit.Framework.TestCaseAttribute("title too long", "{}", ".*title.*", null)]
+        [NUnit.Framework.TestCaseAttribute("missing body", "{\"body\":\"bbbbbb\",\"title\":\"tttt\",\"autthorId\":\"8d0d477f-1378-4fc1-bb47-29eb3ea959e1" +
+            "\",\"tags\":\"Body\"}", ".*body.*", null)]
+        [NUnit.Framework.TestCaseAttribute("title too long", "{\"body\":\"bbbbbb\",\"title\":\"tttt123456789.123456789.123456789.123456789.123456789.1" +
+            "23456789.123456789.123456789.123456789.123456789.\",\"autthorId\":\"4c134160-6575-44" +
+            "21-a7ab-1d75ca586774\",\"tags\":\"Title\"}", ".*title.*", null)]
         public virtual void InvalidPostDataOnInsertion(string @case, string data, string messageRegex, string[] exampleTags)
         {
             string[] @__tags = new string[] {
@@ -214,7 +217,7 @@ this.FeatureBackground();
 #line 45
  testRunner.Given(string.Format("a {0} resource", @case), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line 46
- testRunner.When(string.Format("I post the following data to the /posts API endpoint: {0}", data), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+ testRunner.When(string.Format("I post the following data to the /Posts API endpoint: {0}", data), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line 47
  testRunner.Then("I receive an error (code 400) return message", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line 48

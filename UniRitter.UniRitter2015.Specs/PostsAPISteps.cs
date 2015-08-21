@@ -17,19 +17,19 @@ namespace UniRitter.UniRitter2015.Specs
     [Binding]
     public class PostsAPISteps
     {
-        private readonly HttpClient client;
-        private HttpResponseMessage response;
-        private IEnumerable<Post> backgroundData;
-        private string path;
+        private readonly HttpClient postClient;
+        private HttpResponseMessage postResponse;
+        private IEnumerable<Post> postBackgroundData;
+        private string postPath;
         private Post postData;
-        private Post result;
+        private Post postResult;
 
         public PostsAPISteps()
         {
-            client = new HttpClient();
-            client.BaseAddress = new Uri("http://localhost:9000/");
-            client.DefaultRequestHeaders.Accept.Clear();
-            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            postClient = new HttpClient();
+            postClient.BaseAddress = new Uri("http://localhost:9000/");
+            postClient.DefaultRequestHeaders.Accept.Clear();
+            postClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
         }
 
         [Given(@"an API populated with the following Posts")]
@@ -42,7 +42,7 @@ namespace UniRitter.UniRitter2015.Specs
             var mongoRepo = new MongoRepository<PostModel>(new ApiConfig());
             mongoRepo.Upsert(table.CreateSet<PostModel>());
             */
-            backgroundData = table.CreateSet<Post>();
+            postBackgroundData = table.CreateSet<Post>();
             var repo = new InMemoryRepository<PostModel>();
             foreach (var entry in table.CreateSet<PostModel>()) { repo.Add(entry); }
         }
@@ -50,7 +50,7 @@ namespace UniRitter.UniRitter2015.Specs
         [Then(@"the posted resource now has an Post ID")]
         public void ThenThePostedResourceNowHasAnPostID()
         {
-            Assert.That(result.id, Is.Not.Null);
+            Assert.That(postResult.id, Is.Not.Null);
         }
 
         [Given(@"a Post resource as described below:")]
@@ -71,60 +71,60 @@ namespace UniRitter.UniRitter2015.Specs
         [When(@"I GET from the /(.+) API Post endpoint")]
         public void WhenIGETFromTheAPIPostEndpoint(string path)
         {
-            this.path = path;
-            response = client.GetAsync(path).Result;
+            this.postPath = path;
+            postResponse = postClient.GetAsync(path).Result;
         }
 
         [When(@"I post it to the /Posts API endpoint")]
         public void WhenIPostItToThePostsAPIEndpoint()
         {
-            response = client.PostAsJsonAsync("Posts", postData).Result;
+            postResponse = postClient.PostAsJsonAsync("Posts", postData).Result;
         }
 
-        [When(@"I post the following data to the /Posts API endpoint: \{}")]
+        [When(@"I post the following data to the /Posts API endpoint: (.+)")]
         public void WhenIPostTheFollowingDataToThePostsAPIEndpoint(string jsonData)
         {
             postData = JsonConvert.DeserializeObject<Post>(jsonData);
-            response = client.PostAsJsonAsync("Posts", postData).Result;
+            postResponse = postClient.PostAsJsonAsync("Posts", postData).Result;
         }
 
         [Then(@"I get a list containing the populated Posts resources")]
         public void ThenIGetAListContainingThePopulatedPostsResources()
         {
-            var resourceList = response.Content.ReadAsAsync<IEnumerable<Post>>().Result;
-            Assert.That(backgroundData, Is.SubsetOf(resourceList));
+            var resourceList = postResponse.Content.ReadAsAsync<IEnumerable<Post>>().Result;
+            Assert.That(postBackgroundData, Is.SubsetOf(resourceList));
         }
 
         [Then(@"the data Post matches that id")]
         public void ThenTheDataPostMatchesThatId()
         {
-            var id = new Guid(path.Substring(path.LastIndexOf('/') + 1));
-            result = response.Content.ReadAsAsync<Post>().Result;
-            var expected = backgroundData.Single(p => p.id == id);
-            Assert.That(result, Is.EqualTo(expected));
+            var id = new Guid(postPath.Substring(postPath.LastIndexOf('/') + 1));
+            postResult = postResponse.Content.ReadAsAsync<Post>().Result;
+            var expected = postBackgroundData.Single(p => p.id == id);
+            Assert.That(postResult, Is.EqualTo(expected));
         }
 
         [Then(@"I can fetch /(.+) from the APIPost")]
         public void ThenICanFetchItFromTheAPIPost(string path)
         {
-            var id = result.id.Value;
-            var newEntry = client.GetAsync(path + "/" + id).Result;
+            var id = postResult.id.Value;
+            var newEntry = postClient.GetAsync(path + "/" + id).Result;
             Assert.That(newEntry, Is.Not.Null);
         }
 
         [Then(@"I receive the Post resource")]
         public void ThenIReceiveThePostedResource()
         {
-            result = response.Content.ReadAsAsync<Post>().Result;
-            Assert.That(result.body, Is.EqualTo(postData.body));
+            postResult = postResponse.Content.ReadAsAsync<Post>().Result;
+            Assert.That(postResult.body, Is.EqualTo(postData.body));
         }
 
         [Then(@"I receive a success \(code (.*)\) return Post message")]
         public void ThenIReceiveASuccessCodeReturnPostMessage(int code)
         {
-            if (!response.IsSuccessStatusCode)
+            if (!postResponse.IsSuccessStatusCode)
             {
-                var msg = String.Format("API error: {0}", response.Content.ReadAsStringAsync().Result);
+                var msg = String.Format("API error: {0}", postResponse.Content.ReadAsStringAsync().Result);
                 Assert.Fail(msg);
             }
 
@@ -133,7 +133,7 @@ namespace UniRitter.UniRitter2015.Specs
 
         private void CheckCode(int code)
         {
-            Assert.That(response.StatusCode, Is.EqualTo((HttpStatusCode)code));
+            Assert.That(postResponse.StatusCode, Is.EqualTo((HttpStatusCode)code));
         }
 
         private class Post : IEquatable<Post>
@@ -141,8 +141,8 @@ namespace UniRitter.UniRitter2015.Specs
             public Guid? id { get; set; }
             public string body { get; set; }
             public string title { get; set; }
-            public string authorId { get; set; }
-            public IEnumerable<string> tags { get; set; }
+            public Guid authorId { get; set; }
+            public string tags { get; set; }
 
             public bool Equals(Post other)
             {

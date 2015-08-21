@@ -43,10 +43,10 @@ Background:
 	@integrated
 	Scenario Outline: Invalid post data on insertion
 	Given a <case> resource
-	When I post the following data to the /posts API endpoint: <data>
+	When I post the following data to the /Posts API endpoint: <data>
 	Then I receive an error (code 400) return message
 	And I receive a message that conforms <messageRegex>
 	Examples:
-	| case           | data | messageRegex |
-	| missing body	 | {}   | .*body.*	   |
-	| title too long | {}   | .*title.*    |
+	| case           | data																																																		| messageRegex	|
+	| missing body	 | {"body":"bbbbbb","title":"tttt","autthorId":"8d0d477f-1378-4fc1-bb47-29eb3ea959e1","tags":"Body"}																										| .*body.*		|
+	| title too long | {"body":"bbbbbb","title":"tttt123456789.123456789.123456789.123456789.123456789.123456789.123456789.123456789.123456789.123456789.","autthorId":"4c134160-6575-4421-a7ab-1d75ca586774","tags":"Title"}	| .*title.*		|

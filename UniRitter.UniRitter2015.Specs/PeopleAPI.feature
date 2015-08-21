@@ -47,5 +47,5 @@ Background:
 	And I receive a message that conforms <messageRegex>
 	Examples:
 	| case              | data																						| messageRegex	|
-	| missing firstName	| {"lastName":"de Tal", "email":"fulano@email.com","url":"http://fulano.com.br"}			| .*firstName.*	|
+	| missing firstName	| {"lastName":"de Tal", "email":"fulano@email.com", "url":"http://fulano.com.br"}			| .*firstName.*	|
 	| invalid email		| {"lastName":"de Tal", "firstName":"fulano", "email":"fulano","url":"http://fulano.com.br"}| .*email.*		|

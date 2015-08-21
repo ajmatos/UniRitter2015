@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+
 namespace UniRitter.UniRitter2015.Models
 {
     public class PostModel : IModel
@@ -17,6 +17,6 @@ namespace UniRitter.UniRitter2015.Models
 
         public Guid authorId { get; set; }
 
-        public IEnumerable<string> tags { get; set; }
+        public string tags { get; set; }
     }
 }
